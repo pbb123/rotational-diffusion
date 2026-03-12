@@ -13,3 +13,7 @@ void qmultiply(Quaternion q1,Quaternion q2,Quaternion *result);
 void qconjugate(Quaternion q, Quaternion* result);
 
 void qprint(Quaternion q);
+
+double qdot(Quaternion q1,Quaternion q2);
+
+void rotate(Quaternion rotation, Quaternion vector, Quaternion* result);

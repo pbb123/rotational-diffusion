@@ -4,10 +4,12 @@
 
 int main()
 {
-    Quaternion q1 = {0,0,1,0};
-    Quaternion q2 = {0,1,0,0};
-    Quaternion q3;
-    qmultiply(q1,q2,&q3);
-    qprint(q3);
+    Quaternion q = {0,0,1,0};
+    Quaternion v = {0,1,0,0};
+    Quaternion q2;
+    rotate(q,v,&q2);
+    qprint(q2);
+
+    return 0;
 
 }
