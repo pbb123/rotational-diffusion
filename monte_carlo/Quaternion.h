@@ -20,4 +20,4 @@ long double qdot(Quaternion q1,Quaternion q2);
 
 void rotate(Quaternion rotation, Quaternion vector, Quaternion* result);
 
-void normalize(Quaternion* q);
+void qnormalize(Quaternion* q);

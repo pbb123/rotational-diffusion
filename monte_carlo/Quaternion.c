@@ -1,6 +1,7 @@
 #include "Quaternion.h"
 #include <stdio.h>
 #include <math.h>
+
 void qadd(Quaternion q1,Quaternion q2,Quaternion *result)
 {
     Quaternion ret = 
@@ -12,7 +13,6 @@ void qadd(Quaternion q1,Quaternion q2,Quaternion *result)
     };
     *result = ret;
 }
-
 void qsub(Quaternion q1,Quaternion q2,Quaternion *result)
 {
     Quaternion ret = 
@@ -51,7 +51,7 @@ void qconjugate(Quaternion q, Quaternion* result)
 
 void qprint(Quaternion q)
 {
-    printf("{%LF,%LF,%LF,%LF}\n",q.a,q.b,q.c,q.d);
+    printf("{%Lf,%Lf,%Lf,%Lf}\n",q.a,q.b,q.c,q.d);
 }
 
 long double qdot(Quaternion q1,Quaternion q2)
@@ -68,7 +68,7 @@ void rotate(Quaternion rotation, Quaternion vector, Quaternion* result)
     qmultiply(rotation,vector_rotation_bar,result);
 }
 
-void normalize(Quaternion* q)
+void qnormalize(Quaternion* q)
 {
     double norm = sqrt(q->a*q->a + q->b*q->b +q->c*q->c + q->d*q->d);
     Quaternion new_q = {q->a/norm,q->b/norm,q->c/norm,q->d/norm};
