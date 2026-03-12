@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 #include <stdio.h>
+#include <math.h>
 void qadd(Quaternion q1,Quaternion q2,Quaternion *result)
 {
     Quaternion ret = 
@@ -8,6 +9,18 @@ void qadd(Quaternion q1,Quaternion q2,Quaternion *result)
         q1.b + q2.b,
         q1.c + q2.c,
         q1.d + q2.d
+    };
+    *result = ret;
+}
+
+void qsub(Quaternion q1,Quaternion q2,Quaternion *result)
+{
+    Quaternion ret = 
+    {
+        q1.a - q2.a,
+        q1.b - q2.b,
+        q1.c - q2.c,
+        q1.d - q2.d
     };
     *result = ret;
 }
@@ -38,10 +51,10 @@ void qconjugate(Quaternion q, Quaternion* result)
 
 void qprint(Quaternion q)
 {
-    printf("{%f,%f,%f,%f}\n",q.a,q.b,q.c,q.d);
+    printf("{%LF,%LF,%LF,%LF}\n",q.a,q.b,q.c,q.d);
 }
 
-double qdot(Quaternion q1,Quaternion q2)
+long double qdot(Quaternion q1,Quaternion q2)
 {
     return q1.a*q2.a + q1.b*q2.b + q1.c*q2.c + q1.d*q2.d;
 }
@@ -53,4 +66,11 @@ void rotate(Quaternion rotation, Quaternion vector, Quaternion* result)
     Quaternion vector_rotation_bar;
     qmultiply(vector,rotation_bar,&vector_rotation_bar);
     qmultiply(rotation,vector_rotation_bar,result);
+}
+
+void normalize(Quaternion* q)
+{
+    double norm = sqrt(q->a*q->a + q->b*q->b +q->c*q->c + q->d*q->d);
+    Quaternion new_q = {q->a/norm,q->b/norm,q->c/norm,q->d/norm};
+    *q = new_q;
 }
