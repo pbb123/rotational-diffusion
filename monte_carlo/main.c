@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 #include "Quaternion.h"
-#include "Particle.h"
+#include "Molecule.h"
 
-void sim(double kT, double D[3],int Tmax);
+void sim(double kT, double D[3],long int Tmax, double m0_norm);
 
 double random_double()
 {
@@ -15,12 +15,20 @@ double random_double()
 
 int main()
 {
-    double kT = pow(10,-5); // [kT] = J
-    int Tmax = 50000; // []
-    double D[3] = {1,1,1}; //Diffusion tensor (in diagonal form) [D] = ns^-1
+    double T = 293.15; // K = 20 oC
+    double k = 1.380649; // 10**-23 J/K
+    double kT = k*T; // [kT] = 10**-23 J
 
-    sim(kT,D,Tmax); 
-    return 0;   
+    double m0_norm = 15; // 10^-30 C*m
+
+    long int Tmax = 50000; // number of time steps -- each 0.001 ns long
+
+    double D[3] = {1,1,1}; //Diffusion tensor (in diagonal form) [D] = ns^-1
+    for (int n=0; n<800; n++)
+    {
+        sim(kT,D,Tmax,m0_norm);
+    } 
+    return 0; 
 }
 
 
@@ -35,15 +43,15 @@ dt ~ ns -> dtheta << 1 rad
 
 dtheta = dt * D
 
-0.001 = 1 ps * 1/ns
+0.001 = 0.001 ns * 1/ns
 
-dt = 1 ps
+dt = 0.001 ns
 
 U ~ V/m * C*m * 10**-30 ~ 10**-30 J 
 U/kT - bezwymiarowe
 
 Obsługa programu:
--opcje wywołania
+-opcje wywołania 
 
 Output:
 -

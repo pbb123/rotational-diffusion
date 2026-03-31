@@ -1,5 +1,5 @@
-main: main.c Quaternion.c Particle.c sim.c
-	gcc -o main.out main.c Quaternion.c Particle.c sim.c -lm
+main: main.c Quaternion.c Molecule.c sim.c
+	gcc -o main.out main.c Quaternion.c Molecule.c sim.c -lm
 run: main
 	./main.out
 plot: main
