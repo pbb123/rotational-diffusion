@@ -22,6 +22,7 @@ void random_rotation(Molecule* p)
         p->current_rotation=p->rotz;
     }
     s = random_double();
+    
     if (s<0.5)
     {
         qconjugate(p->current_rotation,&(p->current_rotation));
@@ -57,7 +58,7 @@ void calculate_new_m(Molecule* p)
     rotate(p->current_rotation,p->m,&(p->new_m));
 }
 
-double calculate_energy_difference(Molecule* p, Quaternion E)
+long double calculate_energy_difference(Molecule* p, Quaternion E)
 {
     Quaternion delta_m;
     qsub(p->new_m,p->m,&delta_m);

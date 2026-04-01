@@ -10,20 +10,25 @@ double random_double();
 
 double dtheta = 0.001;
 
-Quaternion E = {0,0,0,0}; /* V/nm =  GV/m */
-Quaternion m0 = {0,-8.4783536*0.108425,8.4783536*0.160436,8.4783536*0.803881}; // 10**-30 C*m
+Quaternion E;
+Quaternion m0; 
 
-void init(double kT, double D[3],long int Tmax, double m0_norm, Molecule* molecule)
+void init(double kT, double D[3], double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, Molecule* molecule)
 {
-    srand(time(NULL));
+    m0.a = 0;
+    m0.b = dipole_moment[0];
+    m0.c = dipole_moment[1];
+    m0.d = dipole_moment[2];
 
-    m0.c = m0_norm;
+    E.a = 0;
+    E.b = electric_field[0]; 
+    E.c = electric_field[1];
+    E.d = electric_field[2];
 
     Quaternion rotx = {cos(dtheta/2),sin(dtheta/2),0,0};
     Quaternion roty = {cos(dtheta/2),0,sin(dtheta/2),0};
     Quaternion rotz = {cos(dtheta/2),0,0,sin(dtheta/2)};
 
-    qnormalize(&m0);
     Quaternion m = m0;
     Quaternion new_m = {0,0,0,0};
     Quaternion position = {1,0,0,0}; //Initial position
@@ -42,25 +47,25 @@ void step(Molecule* molecule, double kT)
     random_rotation(molecule); //Choose a random rotation direction
     
     calculate_new_m(molecule);
-    double delta_U = calculate_energy_difference(molecule,E); //Calculate energy difference
+    long double delta_U = calculate_energy_difference(molecule,E); //Calculate energy difference
 
     double r = random_double();
 
-    if (delta_U<=0 || ((delta_U>=0) && r<exp(-delta_U/kT)))
+    if (delta_U<=0 || ((delta_U>0) && r<exp(-delta_U/kT)))
     { 
         rotate_molecule(molecule);
     }
+    /*here goes data output -- for example: */
+    qprint(molecule->position);
+
 }
 
-void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, long int Tmax /*ps*/, double m0_norm /*C*m*10^-30*/)
+void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, long int Tmax /*ps*/)
 {
     Molecule molecule;
     double dt = dtheta; // ns
 
-    init(kT,D,Tmax,m0_norm,&molecule);
-
-    //printf("%f\n",kT); //Parameters output
-    //printf("%f\n",dt);
+    init(kT,D,electric_field,dipole_moment,&molecule);
 
     int N = (int) (molecule.D[0] + molecule.D[1] + molecule.D[2]); // Number of rotations per time step
 
@@ -70,17 +75,6 @@ void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, long int Tmax /*ps*/, d
         {
             step(&molecule,kT);
         }
-        //printf("%LF\n",-qdot(molecule.m,E)); //Generate output
-        //qprint(molecule.ez);
-        //printf("%Lf\n",molecule.ex.d);
-        //printf("%Lf\n",molecule.ey.d);
-        //printf("%Lf\n",molecule.ey.d);
-        //printf("%Lf\n",qdot(molecule.m,m0)); 
-        //qprint(molecule.position);
-        //printf("%Lf\n",molecule.position.d);
-        //printf("%d\n",t);
     }
-
-    printf("%Lf\n",molecule.ex.d);
 }
 

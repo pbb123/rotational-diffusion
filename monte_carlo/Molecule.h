@@ -22,4 +22,4 @@ Molecule;
 void random_rotation(Molecule* p);
 void rotate_molecule(Molecule* p);
 void calculate_new_m(Molecule* p);
-double calculate_energy_difference(Molecule* p, Quaternion E);
+long double calculate_energy_difference(Molecule* p, Quaternion E);
