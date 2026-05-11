@@ -62,5 +62,9 @@ long double calculate_energy_difference(Molecule* p, Quaternion E)
 {
     Quaternion delta_m;
     qsub(p->new_m,p->m,&delta_m);
-    return -qdot(delta_m,E)/100.0; // J * 10^-30 * 10^9 *10^-2 = 10^-23 J -- it divides nicely with kT
+    return -qdot(delta_m,E)/100; // J * 10^-30 * 10^9 *10^-2 = 10^-23 J -- it divides nicely with kT
 }
+
+
+/*
+*/

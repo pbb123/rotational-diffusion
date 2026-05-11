@@ -13,6 +13,7 @@ double random_double()
     return (double) rand()/RAND_MAX;
 }
 
+
 int main()
 {
     srand(time(NULL));
@@ -25,9 +26,9 @@ int main()
 
     double D[3] = {1,1,1}; //Diffusion tensor (in diagonal form) [D] = ns^-1
 
-    double E[3] = {0,0,1}; // electric field [E] = V/nm = GV/m
+    double E[3] = {0,0,10}; // electric field [E] = V/nm = GV/m
 
-    double m[3] = {0,0,0}; // electric dipole moment [m] = 10^-30 J*C
+    double m[3] = {15,15,15}; // electric dipole moment [m] = 10^-30 J*C
 
     int K = 1; //number of simulations
 
@@ -44,3 +45,6 @@ Obsługa programu:
 -opcje wywołania 
 */
  
+/*
+
+*/
