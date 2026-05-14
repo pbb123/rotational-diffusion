@@ -5,6 +5,7 @@
 
 #include "Quaternion.h"
 #include "Molecule.h"
+#include "main.h"
 
 double random_double();
 
@@ -12,6 +13,7 @@ double dtheta = 0.001;
 
 Quaternion E;
 Quaternion m0; 
+
 
 void init(double kT, double D[3], double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, Molecule* molecule)
 {
@@ -42,7 +44,24 @@ void init(double kT, double D[3], double electric_field[3] /*GV/m*/,  double dip
     *molecule =p;
 }
 
-void step(Molecule* molecule, double kT)
+void generate_output(output_mode mode, Molecule* molecule)
+{
+    switch (mode)
+    {
+    case Position:
+        qprint(molecule->position);
+        break;
+    case Angle:
+        printf("%lf",acos(qdot(E,molecule->m)/qnorm(E)/qnorm(molecule->m)));    
+        break;
+    case Corelation:
+        printf("TODO: corelation calculation");
+    default:
+        break;
+    }
+}
+
+void step(Molecule* molecule, double kT, output_mode out_mode)
 {
     random_rotation(molecule); //Choose a random rotation direction
     
@@ -52,19 +71,16 @@ void step(Molecule* molecule, double kT)
     double r = random_double();
 
     double p = fmin(1, exp(-delta_U/kT));
-    printf("%f",p);
     if (r < p)
     { 
         rotate_molecule(molecule);
     }
-    /*here goes data output -- for example: */
-    //qprint(molecule->m);
-    //printf("%Lf\n",-qdot(molecule->m,E));
+    generate_output(out_mode,molecule);
     qprint(molecule->position);
 
 }
 
-void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, long int Tmax /*ps*/)
+void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, long int Tmax /*ps*/, output_mode out_mode)
 {
     Molecule molecule;
     double dt = dtheta; // ns
@@ -77,7 +93,7 @@ void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3
     {
         for(int i=0; i<N; i++)
         {
-            step(&molecule,kT);
+            step(&molecule,kT,out_mode);
         }
     }
 }

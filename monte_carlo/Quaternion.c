@@ -81,8 +81,14 @@ void rotate(Quaternion rotation, Quaternion vector, Quaternion* result)
 
 void qnormalize(Quaternion* q)
 {
-    if (q->a==0 && q->b==0 && q->c==0 & q->d==0){return;}
+    if (q->a==0 && q->b==0 && q->c==0 && q->d==0){return;}
     double norm = sqrt(q->a*q->a + q->b*q->b +q->c*q->c + q->d*q->d);
     Quaternion new_q = {q->a/norm,q->b/norm,q->c/norm,q->d/norm};
     *q = new_q;
+}
+
+double qnorm(Quaternion q)
+{
+    double norm = sqrt(q.a*q.a + q.b*q.b +q.c*q.c + q.d*q.d);
+    return norm;
 }

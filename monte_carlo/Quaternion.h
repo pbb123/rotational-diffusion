@@ -23,3 +23,5 @@ void rotate(Quaternion rotation, Quaternion vector, Quaternion* result);
 void qnormalize(Quaternion* q);
 
 void minusq(Quaternion q, Quaternion* result);
+
+double qnorm(Quaternion q);

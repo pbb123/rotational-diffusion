@@ -6,17 +6,19 @@
 
 #include "Quaternion.h"
 #include "Molecule.h"
+#include "main.h"
 
-void sim(double kT, double D[3], double electric_field[3], double dipole_moment[3], long int Tmax);
+void sim(double kT, double D[3], double electric_field[3], double dipole_moment[3], long int Tmax, output_mode out_mode);
 
 double random_double()
 {
     return (double) rand()/RAND_MAX;
 }
 
-void parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[], double (*E)[], double (*m)[])
+output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[], double (*E)[], double (*m)[])
 {
     int args_left = argc-1;
+    output_mode mode;
     while (args_left>0)
     {
         char* argument = argv[argc-args_left];
@@ -26,35 +28,79 @@ void parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[
             {
                 args_left--;
                 *T = atof(argv[argc-args_left]);
-                printf("T=%f\n",*T);
+                printf("T=%lf\n",*T);
             }
-        }
-        else if (!strcmp(argument,"T"))
-        {
-
         }
         else if (!strcmp(argument,"Tmax"))
         {
-            
+            if (args_left>=1)
+            {
+                args_left--;
+                *Tmax = atoll(argv[argc-args_left]);
+                printf("Tmax=%ld\n",*Tmax);
+            }
         }
         else if (!strcmp(argument,"D"))
         {
-            
+            if (args_left>=3)
+            {
+                args_left--;
+                (*D)[0] = atof(argv[argc-args_left]);
+                args_left--;
+                (*D)[1] = atof(argv[argc-args_left]);
+                args_left--;
+                (*D)[2] = atof(argv[argc-args_left]);
+                printf("D=[%lf,%lf,%lf]\n",(*D)[0],(*D)[0],(*D)[0]);
+            }            
         }
         else if (!strcmp(argument,"E"))
         {
-            
+            if (args_left>=3)
+            {
+                args_left--;
+                (*E)[0] = atof(argv[argc-args_left]);
+                args_left--;
+                (*E)[1] = atof(argv[argc-args_left]);
+                args_left--;
+                (*E)[2] = atof(argv[argc-args_left]);
+                printf("E=[%lf,%lf,%lf]\n",(*E)[0],(*E)[0],(*E)[0]);
+            }  
         }
         else if (!strcmp(argument,"m"))
         {
-            
+            if (args_left>=3)
+            {
+                args_left--;
+                (*m)[0] = atof(argv[argc-args_left]);
+                args_left--;
+                (*m)[1] = atof(argv[argc-args_left]);
+                args_left--;
+                (*m)[2] = atof(argv[argc-args_left]);
+                printf("m=[%lf,%lf,%lf]\n",(*m)[0],(*m)[0],(*m)[0]);
+            }             
         }
         else if (!strcmp(argument,"-o"))
         {
-            
+            if (args_left>=1)
+            {
+                args_left--;
+                if(!strcmp(argv[argc-args_left],"pos"))
+                {
+                    mode = Position;
+                }
+                if(!strcmp(argv[argc-args_left],"angle"))
+                {
+                    mode = Angle;
+                }
+                if(!strcmp(argv[argc-args_left],"cor"))
+                {
+                    mode = Corelation;
+                }
+            }           
         }
         args_left--;
     }
+    return mode;
 }
 int main(int argc, char* argv[])
 {
@@ -74,11 +120,12 @@ int main(int argc, char* argv[])
 
     int Nsim = 1; //number of simulations
 
-    parse_input(argc,argv,&T,&Tmax,&D,&E,&m);
+
+    output_mode out_mode = parse_input(argc,argv,&T,&Tmax,&D,&E,&m);
 
     for (int n=0; n<Nsim; n++)
     {
-        //sim(kT,D,E,m,Tmax);
+        sim(kT,D,E,m,Tmax,out_mode);
     } 
     return 0; 
 }
