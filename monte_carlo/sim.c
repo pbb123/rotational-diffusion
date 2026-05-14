@@ -52,7 +52,7 @@ void step(Molecule* molecule, double kT)
     double r = random_double();
 
     double p = fmin(1, exp(-delta_U/kT));
-    printf("%f",p)
+    printf("%f",p);
     if (r < p)
     { 
         rotate_molecule(molecule);

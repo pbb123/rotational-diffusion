@@ -2,6 +2,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "Quaternion.h"
 #include "Molecule.h"
@@ -13,7 +14,48 @@ double random_double()
     return (double) rand()/RAND_MAX;
 }
 
+void parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[], double (*E)[], double (*m)[])
+{
+    int args_left = argc-1;
+    while (args_left>0)
+    {
+        char* argument = argv[argc-args_left];
+        if (!strcmp(argument,"T"))
+        {
+            if (args_left>=1)
+            {
+                args_left--;
+                *T = atof(argv[argc-args_left]);
+                printf("T=%f\n",*T);
+            }
+        }
+        else if (!strcmp(argument,"T"))
+        {
 
+        }
+        else if (!strcmp(argument,"Tmax"))
+        {
+            
+        }
+        else if (!strcmp(argument,"D"))
+        {
+            
+        }
+        else if (!strcmp(argument,"E"))
+        {
+            
+        }
+        else if (!strcmp(argument,"m"))
+        {
+            
+        }
+        else if (!strcmp(argument,"-o"))
+        {
+            
+        }
+        args_left--;
+    }
+}
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
@@ -30,13 +72,13 @@ int main(int argc, char* argv[])
 
     double m[3] = {15,15,15}; // electric dipole moment [m] = 10^-30 m*C
 
-    int K = 1; //number of simulations
+    int Nsim = 1; //number of simulations
 
-    //parse(argc,argv);
+    parse_input(argc,argv,&T,&Tmax,&D,&E,&m);
 
-    for (int n=0; n<K; n++)
+    for (int n=0; n<Nsim; n++)
     {
-        sim(kT,D,E,m,Tmax);
+        //sim(kT,D,E,m,Tmax);
     } 
     return 0; 
 }
