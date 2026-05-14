@@ -52,14 +52,15 @@ void step(Molecule* molecule, double kT)
     double r = random_double();
 
     double p = fmin(1, exp(-delta_U/kT));
-
+    printf("%f",p)
     if (r < p)
     { 
         rotate_molecule(molecule);
     }
     /*here goes data output -- for example: */
     //qprint(molecule->m);
-    printf("%Lf\n",-qdot(molecule->m,E));
+    //printf("%Lf\n",-qdot(molecule->m,E));
+    qprint(molecule->position);
 
 }
 

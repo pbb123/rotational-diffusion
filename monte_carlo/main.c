@@ -14,7 +14,7 @@ double random_double()
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
     srand(time(NULL));
 
@@ -28,9 +28,11 @@ int main()
 
     double E[3] = {0,0,10}; // electric field [E] = V/nm = GV/m
 
-    double m[3] = {15,15,15}; // electric dipole moment [m] = 10^-30 J*C
+    double m[3] = {15,15,15}; // electric dipole moment [m] = 10^-30 m*C
 
     int K = 1; //number of simulations
+
+    //parse(argc,argv);
 
     for (int n=0; n<K; n++)
     {
@@ -43,8 +45,7 @@ int main()
 /*TODO:
 Obsługa programu:
 -opcje wywołania 
-*/
- 
-/*
-
+-rozkład kąta między m, a E -- czy nie zależy od kroku czasowego dt
+-funkcja korelacji:
+    C(\tau) = <m \cdot m(t-\tau)> -- średnia po t -- niezależne od kroku czasowego?
 */
