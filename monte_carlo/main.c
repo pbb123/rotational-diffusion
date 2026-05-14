@@ -18,7 +18,7 @@ double random_double()
 output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[], double (*E)[], double (*m)[])
 {
     int args_left = argc-1;
-    output_mode mode;
+    output_mode mode = None;
     while (args_left>0)
     {
         char* argument = argv[argc-args_left];
@@ -28,7 +28,6 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
             {
                 args_left--;
                 *T = atof(argv[argc-args_left]);
-                printf("T=%lf\n",*T);
             }
         }
         else if (!strcmp(argument,"Tmax"))
@@ -37,7 +36,6 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
             {
                 args_left--;
                 *Tmax = atoll(argv[argc-args_left]);
-                printf("Tmax=%ld\n",*Tmax);
             }
         }
         else if (!strcmp(argument,"D"))
@@ -50,7 +48,6 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 (*D)[1] = atof(argv[argc-args_left]);
                 args_left--;
                 (*D)[2] = atof(argv[argc-args_left]);
-                printf("D=[%lf,%lf,%lf]\n",(*D)[0],(*D)[0],(*D)[0]);
             }            
         }
         else if (!strcmp(argument,"E"))
@@ -63,7 +60,6 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 (*E)[1] = atof(argv[argc-args_left]);
                 args_left--;
                 (*E)[2] = atof(argv[argc-args_left]);
-                printf("E=[%lf,%lf,%lf]\n",(*E)[0],(*E)[0],(*E)[0]);
             }  
         }
         else if (!strcmp(argument,"m"))
@@ -76,7 +72,6 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 (*m)[1] = atof(argv[argc-args_left]);
                 args_left--;
                 (*m)[2] = atof(argv[argc-args_left]);
-                printf("m=[%lf,%lf,%lf]\n",(*m)[0],(*m)[0],(*m)[0]);
             }             
         }
         else if (!strcmp(argument,"-o"))
@@ -123,6 +118,12 @@ int main(int argc, char* argv[])
 
     output_mode out_mode = parse_input(argc,argv,&T,&Tmax,&D,&E,&m);
 
+    printf("T=%lfK\n",T);
+    printf("Tmax=%ld\n",Tmax);
+    printf("D=[%lf,%lf,%lf] ns^-1\n",D[0],D[1],D[2]);
+    printf("E=[%lf,%lf,%lf] GV/m\n",E[0],E[1],E[2]);
+    printf("m=[%lf,%lf,%lf] 10^-30 m*C\n",m[0],m[1],m[2]);
+
     for (int n=0; n<Nsim; n++)
     {
         sim(kT,D,E,m,Tmax,out_mode);
@@ -131,9 +132,9 @@ int main(int argc, char* argv[])
 }
 
 
-/*TODO:
+/*TODO:tau
 Obsługa programu:
--opcje wywołania 
+-opcje wywołania V
 -rozkład kąta między m, a E -- czy nie zależy od kroku czasowego dt
 -funkcja korelacji:
     C(\tau) = <m \cdot m(t-\tau)> -- średnia po t -- niezależne od kroku czasowego?

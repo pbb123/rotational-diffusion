@@ -52,7 +52,8 @@ void generate_output(output_mode mode, Molecule* molecule)
         qprint(molecule->position);
         break;
     case Angle:
-        printf("%lf",acos(qdot(E,molecule->m)/qnorm(E)/qnorm(molecule->m)));    
+        double angle = acos(qdot(E,molecule->m)/qnorm(E)/qnorm(molecule->m));
+        printf("%lf\n",angle);    
         break;
     case Corelation:
         printf("TODO: corelation calculation");
@@ -75,9 +76,6 @@ void step(Molecule* molecule, double kT, output_mode out_mode)
     { 
         rotate_molecule(molecule);
     }
-    generate_output(out_mode,molecule);
-    qprint(molecule->position);
-
 }
 
 void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3] /*GV/m*/,  double dipole_moment[3] /*10^-30 C*m */, long int Tmax /*ps*/, output_mode out_mode)
@@ -95,6 +93,7 @@ void sim(double kT /*10**-23 J*/, double D[3] /*ns^-1*/, double electric_field[3
         {
             step(&molecule,kT,out_mode);
         }
+        generate_output(out_mode,&molecule);
     }
 }
 
