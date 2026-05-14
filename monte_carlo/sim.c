@@ -55,8 +55,9 @@ void generate_output(output_mode mode, Molecule* molecule)
         double angle = acos(qdot(E,molecule->m)/qnorm(E)/qnorm(molecule->m));
         printf("%lf\n",angle);    
         break;
-    case Corelation:
-        printf("TODO: corelation calculation");
+    case M:
+        qprint(molecule->m);
+        break;
     default:
         break;
     }

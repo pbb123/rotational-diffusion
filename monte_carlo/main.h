@@ -2,6 +2,6 @@ typedef enum
 {
     Position,
     Angle,
-    Corelation,
+    M,
     None
 } output_mode;

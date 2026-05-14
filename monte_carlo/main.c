@@ -87,9 +87,9 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 {
                     mode = Angle;
                 }
-                if(!strcmp(argv[argc-args_left],"cor"))
+                if(!strcmp(argv[argc-args_left],"m"))
                 {
-                    mode = Corelation;
+                    mode = M;
                 }
             }           
         }
