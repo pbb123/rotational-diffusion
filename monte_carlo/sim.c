@@ -56,8 +56,10 @@ void generate_output(output_mode mode, Molecule* molecule)
         printf("%lf\n",angle);    
         break;
     case M:
-        qprint(molecule->m);
+        printf("%Lf %Lf %Lf\n",molecule->m.b,molecule->m.c,molecule->m.d);
         break;
+    case Energy:
+        printf("%Lf\n",-qdot(E,molecule->m));
     default:
         break;
     }

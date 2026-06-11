@@ -169,3 +169,5 @@ Obsługa programu:
 -funkcja korelacji:
     C(\tau) = <m \cdot m(t-\tau)> -- średnia po t -- niezależne od kroku czasowego?
 */
+
+
