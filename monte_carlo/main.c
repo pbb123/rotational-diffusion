@@ -15,10 +15,32 @@ double random_double()
     return (double) rand()/RAND_MAX;
 }
 
+void print_usage(char* filename)
+{
+    printf("Usage: %s [ParameterName ParameterValue]... [-o OutputMode]\n"
+           "Possible parameter names:\n"
+           "   T - temperature in K\n"
+           "   Tmax - number of time steps\n"
+           "   D - diffusion tensor (3 values separated by space) in ns^-1\n"
+           "   E - electric field (3 values separated by space) in GV/m\n"
+           "   m - magnetic dipole moment (3 values separated by space) in 10^-30 C*m\n"
+           "Possible output modes:\n"
+           "   pos - Molecule position (as a 4 component quaternion)\n"
+           "   angle - Angle beetween m and E\n"
+           "   m - magnetic dipole moment\n"
+           "   U - potential energy\n"
+        ,filename);
+    exit(0);
+}
+
 output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, double (*D)[], double (*E)[], double (*m)[])
 {
     int args_left = argc-1;
     output_mode mode = None;
+    if (args_left==0)
+    {
+        print_usage(argv[0]);
+    }
     while (args_left>0)
     {
         char* argument = argv[argc-args_left];
@@ -74,6 +96,10 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 (*m)[2] = atof(argv[argc-args_left]);
             }             
         }
+        else if (!strcmp(argument,"--help") || !strcmp(argument,"-h"))
+        {
+            print_usage(argv[0]);
+        }
         else if (!strcmp(argument,"-o"))
         {
             if (args_left>=1)
@@ -90,6 +116,10 @@ output_mode parse_input(int argc, char* argv[], double* T, long int* Tmax, doubl
                 if(!strcmp(argv[argc-args_left],"m"))
                 {
                     mode = M;
+                }
+                if(!strcmp(argv[argc-args_left],"U"))
+                {
+                    mode = Energy;
                 }
             }           
         }
@@ -118,11 +148,11 @@ int main(int argc, char* argv[])
 
     output_mode out_mode = parse_input(argc,argv,&T,&Tmax,&D,&E,&m);
 
-    printf("T=%lfK\n",T);
-    printf("Tmax=%ld\n",Tmax);
-    printf("D=[%lf,%lf,%lf] ns^-1\n",D[0],D[1],D[2]);
-    printf("E=[%lf,%lf,%lf] GV/m\n",E[0],E[1],E[2]);
-    printf("m=[%lf,%lf,%lf] 10^-30 m*C\n",m[0],m[1],m[2]);
+    fprintf(stderr,"T=%lfK\n",T);
+    fprintf(stderr,"Tmax=%ld\n",Tmax);
+    fprintf(stderr,"D=[%lf,%lf,%lf] ns^-1\n",D[0],D[1],D[2]);
+    fprintf(stderr,"E=[%lf,%lf,%lf] GV/m\n",E[0],E[1],E[2]);
+    fprintf(stderr,"m=[%lf,%lf,%lf] 10^-30 m*C\n",m[0],m[1],m[2]);
 
     for (int n=0; n<Nsim; n++)
     {
