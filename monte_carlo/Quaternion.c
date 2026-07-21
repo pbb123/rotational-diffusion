@@ -62,7 +62,7 @@ void qconjugate(Quaternion q, Quaternion* result)
 
 void qprint(Quaternion q)
 {
-    printf("{%Lf,%Lf,%Lf,%Lf}\n",q.a,q.b,q.c,q.d);
+    printf("%Lf %Lf %Lf %Lf\n",q.a,q.b,q.c,q.d);
 }
 
 long double qdot(Quaternion q1,Quaternion q2)
