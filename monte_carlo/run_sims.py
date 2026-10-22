@@ -3,6 +3,7 @@ from itertools import product
 
 import numpy as np
 import scipy as scp
+import matplotlib.pyplot as plt
 
 def wigner_d_from_quaternion(l, m, n, q):
     """
@@ -75,22 +76,37 @@ def wigner_d_from_quaternion(l, m, n, q):
 
     return res
 
-T = 300 # K
-m = [0,0,0.1]
-E = [0,0,1]
-D = [1,1,1]
+
 def run_sim(T,m,E,D):
     subprocess.run(["./main.out","T",str(T),"m",*map(str,m),"E",*map(str,E),"D",*map(str,D),"-o","pos"],
                    stdout=open(f"out/quat_T={T}_m={m}_E={E}_D={D}.dat"
                                ,'w+'))
-def calculate_wigner_cor(quat):
+def calculate_wigner_cor(quat,D):
     for (l,m,n) in ((l,m,n) for l in range(2) for m in range(-l,l+1) for n in range(-l,l+1)):
         wigner = wigner_d_from_quaternion(l,m,n,quat)
-        cor = scp.signal.correlate(wigner,np.conj(wigner),mode="same")
+        cor = scp.signal.correlate(wigner,wigner,mode="full")
+        cor /= np.max(cor)
         np.savetxt(open(
-            f"out/cor_T={T}_m={m}_E={E}_D={D}_({l}_{m}_{n}).dat",'w+')
+            f"out/cor_{D}_({l}_{m}_{n}).dat",'w+')
             ,cor,delimiter=" ")
-        
-run_sim(T,m,E,D)
-quat = np.loadtxt(f"out/quat_T={T}_m={m}_E={E}_D={D}.dat",delimiter=" ")
-calculate_wigner_cor(quat)
+        make_plot(D,l,m,n)
+def run_sims(T,m,E,D):
+    for i in np.arange(np.size(T)):
+        run_sim(T[i],m[i],E[i],D[i])
+        quat = np.loadtxt(f"out/quat_T={T[i]}_m={m[i]}_E={E[i]}_D={D[i]}.dat",delimiter=" ")
+        calculate_wigner_cor(quat,D[i])
+
+def make_plot(D,l,m,n):
+    cor =np.loadtxt(f"out/cor_{D}_({l}_{m}_{n}).dat",dtype=np.complex128)
+    plt.clf()
+    plt.plot(cor)
+    plt.plot(np.imag(cor))
+    plt.title(f"D={D} l={l} m={m} n={n}")
+    plt.savefig(f"plots/cor_{D}_({l}_{m}_{n}).png")
+
+N = 10
+T = np.repeat(300,N)
+m = np.repeat([[0,0,0.1]],N,0)
+E = np.repeat([[0,0,0]],N,0)
+D = np.arange(1,N+1)[:,None]*np.repeat([[1,1,1]],N,0)
+run_sims(T,m,E,D)
